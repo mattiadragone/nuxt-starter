@@ -71,7 +71,7 @@ Open http://localhost:3000
 │  └─ supabase.ts
 ├─ server/
 │  └─ api/
-│     ├─ content.get.ts
+│     ├─ cms.get.ts
 │     ├─ ping.get.ts
 │     └─ supabase-health.get.ts
 ├─ .env.example
@@ -133,7 +133,7 @@ to anon
 using (published = true);
 ```
 
-> ⚠️ Keep the **service role key** on the server only. The `/api/content` endpoint already uses it server-side.
+> ⚠️ Keep the **service role key** on the server only. The `/api/cms` endpoint already uses it server-side.
 
 ### 3) Auth (Magic Link)
 - In Supabase Dashboard → Authentication → Providers → **Email**: enable **Magic Link**.
@@ -148,7 +148,7 @@ using (published = true);
 - **GSAP** demo animation
 - **Ping API** button → calls `/api/ping`
 - **Supabase (client) test** → reads `demo_items` with anon key
-- **Fetch CMS (server)** → calls `/api/content` (service-role server read)
+- **Fetch CMS (server)** → calls `/api/cms` (service-role server read)
 
 ---
 

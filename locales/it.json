@@ -1,0 +1,41 @@
+{
+  "navigation": {
+    "home": "Home",
+    "protected": "Area protetta"
+  },
+  "layout": {
+    "footerFallback": "© Site — Tutti i diritti riservati"
+  },
+  "home": {
+    "title": "Nuxt + Supabase + GSAP starter",
+    "subtitle": "Dimostrazione minimale",
+    "buttons": {
+      "ping": "Ping API",
+      "demoItems": "Test Supabase (client)",
+      "cms": "Recupera CMS (server)"
+    },
+    "envNotice": "Se le variabili non sono configurate, le chiamate client mostreranno errori gestiti.",
+    "resultsTitle": "Risultati"
+  },
+  "login": {
+    "title": "Accedi",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "submit": "Entra",
+    "errorFallback": "Accesso non riuscito"
+  },
+  "protected": {
+    "title": "Area protetta",
+    "loading": "Caricamento in corso…",
+    "loggedInPrefix": "Sei collegato come",
+    "noSession": "Sessione non trovata, reindirizzamento…",
+    "logout": "Esci",
+    "logoutBusy": "Uscita in corso…",
+    "logoutError": "Impossibile completare il logout"
+  },
+  "components": {
+    "gsapDemo": {
+      "label": "Riquadro animato GSAP"
+    }
+  }
+}

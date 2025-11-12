@@ -7,7 +7,15 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'vercel'
   },
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n'],
+  i18n: {
+    defaultLocale: 'it',
+    strategy: 'no_prefix',
+    langDir: 'locales',
+    locales: [
+      { code: 'it', iso: 'it-IT', file: 'it.json', name: 'Italiano' }
+    ]
+  },
   runtimeConfig: {
     // PRIVATE (server only)
     supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
