@@ -1,42 +1,59 @@
+import type { Session, SupabaseClient } from '@supabase/supabase-js'
 import { useState } from '#imports'
 
-export default defineNuxtPlugin((nuxtApp)=>{
-  const user = useState<any>('auth-user', () => null)
-  const supa:any = (nuxtApp as any).$supabase
-  if(!supa || !supa.auth){
-    if(process.client) console.warn('[Auth] $supabase not available; auth idle.')
+type AuthListener = ReturnType<SupabaseClient['auth']['onAuthStateChange']>
+type AuthSubscription = AuthListener['data']['subscription'] | null
+
+export default defineNuxtPlugin(async (nuxtApp) => {
+  const user = useState<Session['user'] | null>('auth-user', () => null)
+  const supabase = (nuxtApp as unknown as { $supabase?: SupabaseClient }).$supabase
+
+  if (!supabase?.auth) {
+    if (process.client) {
+      console.warn('[Auth] $supabase not available; auth idle.')
+    }
+
     return { provide: { currentUser: user } }
   }
 
-  const syncUser = (session:any)=>{ user.value = session?.user ?? null }
+  const syncUser = (session: Session | null) => {
+    user.value = session?.user ?? null
+  }
 
-  supa.auth.getSession()
-    .then(({ data, error }:any)=>{
-      if(error){
-        console.error('[Auth] getSession() failed:', error)
-        return
-      }
-      syncUser(data?.session)
-    })
-    .catch((err:unknown)=>{
-      console.error('[Auth] getSession() threw:', err)
-    })
+  try {
+    const { data, error } = await supabase.auth.getSession()
 
-  const { data: authListener, error: listenerError }:any = supa.auth.onAuthStateChange((_e:any, session:any)=>{
-    syncUser(session)
-  })
+    if (error) {
+      console.error('[Auth] getSession() failed:', error)
+    } else {
+      syncUser(data?.session ?? null)
+    }
+  } catch (err) {
+    console.error('[Auth] getSession() threw:', err)
+  }
 
-  if(listenerError){
+  let subscription: AuthSubscription = null
+
+  const { data: authListener, error: listenerError } = supabase.auth.onAuthStateChange(
+    (_event, session) => {
+      syncUser(session)
+    }
+  )
+
+  if (listenerError) {
     console.error('[Auth] onAuthStateChange failed:', listenerError)
   }
 
-  const subscription = authListener?.subscription
+  subscription = authListener?.subscription ?? null
 
-  if(subscription){
-    nuxtApp.hook('app:beforeUnmount', ()=>{
+  const unsubscribe = () => {
+    if (subscription) {
       subscription.unsubscribe()
-    })
+      subscription = null
+    }
   }
+
+  nuxtApp.hook('app:beforeUnmount', unsubscribe)
 
   return { provide: { currentUser: user } }
 })
