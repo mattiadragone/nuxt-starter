@@ -14,7 +14,8 @@
     "nuxt": "latest",
     "@supabase/supabase-js": "latest",
     "gsap": "latest",
-    "@nuxtjs/tailwindcss": "latest"
+    "@nuxtjs/tailwindcss": "latest",
+    "@nuxtjs/i18n": "latest"
   },
   "devDependencies": {
     "eslint": "latest",
