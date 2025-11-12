@@ -1,10 +1,10 @@
 <script setup lang="ts">
-
 import GsapDemo from '~/components/GsapDemo.client.vue'
 
 type DemoItem = { id: number; name: string }
 type PingResponse = { ok: boolean; ts: number }
 type CmsItem = { id: string; slug: string; content: string; published: boolean }
+type CmsResponse = { ok: boolean; items?: CmsItem[]; bySlug?: Record<string, CmsItem | null>; error?: string }
 
 const output = ref<string>('')
 const { $supabase } = useNuxtApp()
@@ -25,8 +25,7 @@ const loadDemoItems = async () => {
 }
 
 const fetchCms = async () => {
-  const res = await $fetch<{ ok: boolean; items?: CmsItem[]; error?: string }>('/api/content')
-    .catch(e => ({ ok: false, error: String(e) }))
+  const res = await $fetch<CmsResponse>('/api/cms').catch(e => ({ ok: false, error: String(e) }))
   output.value = JSON.stringify(res, null, 2)
 }
 </script>
