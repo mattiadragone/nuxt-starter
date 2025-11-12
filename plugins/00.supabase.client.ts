@@ -7,7 +7,12 @@ export default defineNuxtPlugin(()=>{
     if(process.client) console.warn('[Supabase] Missing env: NUXT_PUBLIC_SUPABASE_URL / NUXT_PUBLIC_SUPABASE_ANON_KEY')
     const stub:any={
       from:()=>({ select:async()=>{ throw new Error('Supabase not configured: set envs in .env') } }),
-      auth:{ getSession:async()=>({data:{session:null},error:null}), signInWithOtp:async()=>({data:null,error:new Error('Supabase not configured')}), signOut:async()=>({error:null}), onAuthStateChange:()=>({data:{subscription:{unsubscribe:()=>{}}}}) }
+      auth:{
+        getSession:async()=>({data:{session:null},error:null}),
+        signInWithOtp:async()=>({data:null,error:new Error('Supabase not configured')}),
+        signOut:async()=>({error:null}),
+        onAuthStateChange:()=>({data:{subscription:{unsubscribe:()=>{}}},error:null})
+      }
     }
     return { provide: { supabase: stub } }
   }
